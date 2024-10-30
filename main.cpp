@@ -156,10 +156,14 @@ void menu()
                 displaySalary(list);
                 break;
             case 0:
-                cout << "Goodbye!" << endl;
+                colorTextForOneLine("Goodbye!\n", 13);
                 list.saveToFile("employees.txt");
                 return;
         }
+        cout << endl;
+        cout << "Press any key to continue...";
+        getchar();
+        getchar();
         cout << endl;
     }
 }
