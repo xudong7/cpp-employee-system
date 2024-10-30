@@ -96,6 +96,7 @@ void deleteEmployee(EmployeeList& list)
 {
     int id;
     colorTextForOneLine("***Deleting employee***\n", 10);
+    list.display();
     cout << "please enter the ID of employee: ";
     cin >> id;
     list.deleteByID(id);
