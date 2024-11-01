@@ -3,6 +3,24 @@
 #include <fstream>
 #include <windows.h>
 using namespace std;
+#define RED 12
+#define GREEN 10
+#define PURPLE 13
+#define WHITE 7
+#define PALE_BLUE 3
+
+void setColor(int color)
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, color);
+}
+
+void colorTextForOneLine(string text, int color)
+{
+    setColor(color);
+    cout << text;
+    setColor(WHITE);
+}
 
 class Person
 {
@@ -67,12 +85,16 @@ public:
 
 class Manager : virtual public Person
 {
+    static int hasManager;
 public:
     Manager(string name) : Person(name, 4)
     {
         setSalary();
+        hasManager = 1;
     }
     virtual void setSalary() { this->salary = 18000; }
+    static void setHasManager(int _hasManager) { hasManager = _hasManager; }
+    static int getHasManager() { return hasManager; }
 };
 
 class SalesManager : virtual public SaleMan
@@ -139,8 +161,12 @@ public:
             if (t)
             {
                 int workHours;
-                cout << "Enter work hours for " << t->getName() << ": ";
+                colorTextForOneLine(t->getName(), PURPLE);
+                cout << " is a technician.\n";
+                cout << "Enter work hours, or enter -1 to skip: ";
                 cin >> workHours;
+                if (workHours == -1)
+                    continue;
                 t->setWorkHours(workHours);
                 t->setSalary();
             }
@@ -154,8 +180,12 @@ public:
             if (s)
             {
                 double sales;
-                cout << "Enter sales for " << s->getName() << ": ";
+                colorTextForOneLine(s->getName(), PURPLE);
+                cout << " is a saleman.\n";
+                cout << "Enter sales, or enter -1 to skip: ";
                 cin >> sales;
+                if (sales == -1)
+                    continue;
                 s->setSales(sales);
                 s->setSalary();
             }
@@ -217,6 +247,5 @@ public:
         }
 
         file.close();
-        cout << "Employee data loaded from " << filename << "..." << endl;
     }
 };
