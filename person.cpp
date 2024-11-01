@@ -31,6 +31,7 @@ public:
     virtual void setSalary() = 0;
     virtual void setWorkHours(int workHours) {}
     virtual void setSales(double sales) {}
+    static void setCount(int _count) { count = _count; }
     virtual ~Person() {}
 };
 

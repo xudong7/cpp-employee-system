@@ -28,7 +28,8 @@ void insertAll(EmployeeList& list)
     cin >> choice;
     if (choice != 'y') return;
     list.clear();
-    colorTextForOneLine("***Inserting employees***\n", 10);
+    Person::setCount(0);
+    colorTextForOneLine("*** Inserting employees ***\n", 10);
     cout << "please enter the name of Manager: ";
     cin >> name;
     list.addEmployee(new Manager(name));
@@ -69,7 +70,7 @@ void addEmployee(EmployeeList& list)
 {
     string name;
     int grade;
-    colorTextForOneLine("***Adding new employee***\n", 10);
+    colorTextForOneLine("*** Adding new employee ***\n", 10);
     cout << "please enter employee name and grade(4 Manager 3 Technician 2 SalesManager 1 SaleMan): ";
     cin >> name >> grade;
     switch (grade)
@@ -95,7 +96,7 @@ void addEmployee(EmployeeList& list)
 void deleteEmployee(EmployeeList& list)
 {
     int id;
-    colorTextForOneLine("***Deleting employee***\n", 10);
+    colorTextForOneLine("*** Deleting employee ***\n", 10);
     list.display();
     cout << "please enter the ID of employee: ";
     cin >> id;
@@ -103,19 +104,19 @@ void deleteEmployee(EmployeeList& list)
     colorTextForOneLine("Deleting employee done.\n", 10);
 }
 
-void insertSalary(EmployeeList& list)
+void insertInfomation(EmployeeList& list)
 {
     int workHours;
     double sales;
-    colorTextForOneLine("***Inserting salary***\n", 10);
+    colorTextForOneLine("*** Inserting infomation ***\n", 10);
     list.setWorkHour();
     list.setSales();
-    colorTextForOneLine("Inserting salary done.\n", 10);
+    colorTextForOneLine("Inserting infomation done.\n", 10);
 }
 
 void displaySalary(EmployeeList& list)
 {
-    colorTextForOneLine("***Displaying salary table***\n", 10);
+    colorTextForOneLine("*** Displaying salary table ***\n", 10);
     list.display();
     colorTextForOneLine("Displaying salary table done.\n", 10);
 }
@@ -129,12 +130,12 @@ void menu()
     {
         colorTextForOneLine("Company Employee Manage System\n", 3);
         cout << "--------------------------------" << endl;
-        cout << "1. Insert All Employee" << endl;
-        cout << "2. Add new Employee" << endl;
-        cout << "3. delete Employee" << endl;
-        cout << "4. Insert Salary" << endl;
-        cout << "5. Display Salary Table" << endl;
-        cout << "0. Exit" << endl;
+        cout << "    1. Insert All Employee" << endl;
+        cout << "    2. Add new Employee" << endl;
+        cout << "    3. delete Employee" << endl;
+        cout << "    4. Insert Infomation" << endl;
+        cout << "    5. Display Salary Table" << endl;
+        cout << "    0. Exit" << endl;
         cout << "--------------------------------" << endl;
         cout << "Please choose: ";
         int choice;
@@ -151,13 +152,13 @@ void menu()
                 deleteEmployee(list);
                 break;
             case 4:
-                insertSalary(list);
+                insertInfomation(list);
                 break;
             case 5:
                 displaySalary(list);
                 break;
             case 0:
-                colorTextForOneLine("Goodbye!\n", 13);
+                colorTextForOneLine("*** Goodbye! ***\n", 13);
                 list.saveToFile("employees.txt");
                 return;
         }
