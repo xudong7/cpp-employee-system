@@ -1,5 +1,5 @@
 #include "person.cpp"
-// #include "load.cpp"
+#include "load.cpp"
 int Person::count = 0;
 int Manager::hasManager = 0;
 
@@ -61,9 +61,11 @@ void addEmployee(EmployeeList &list)
     string name;
     int grade;
     colorTextForOneLine("*** Adding new employee ***\n", GREEN);
-    cout << "please enter employee name and grade(4 Manager 3 Technician 2 SalesManager 1 SaleMan): ";
-    cin >> name >> grade;
+    cout << "please enter name: ";
+    cin >> name;
     cout << endl;
+    cout << "please enter grade(4 for Manager, 3 for Technician, 2 for SalesManager, 1 for SaleMan): ";
+    cin >> grade;
     switch (grade)
     {
     case 4:
@@ -95,24 +97,11 @@ void deleteEmployee(EmployeeList &list)
 {
     colorTextForOneLine("*** Deleting employee ***\n", GREEN);
     list.display();
-    cout << "choose delete way(enter 'y' to delete by ID, enter 'n' to delete by Name): ";
-    char choice;
-    cin >> choice;
     cout << endl;
-    if (choice == 'y')
-    {
-        int id;
-        cout << "please enter the ID of employee: ";
-        cin >> id;
-        list.deleteByID(id);
-    }
-    else
-    {
-        string name;
-        cout << "please enter the name of employee: ";
-        cin >> name;
-        list.deleteByName(name);
-    }
+    int id;
+    cout << "please enter the ID of employee: ";
+    cin >> id;
+    list.deleteByID(id);
     cout << endl;
     colorTextForOneLine("Deleting employee done.\n", GREEN);
 }
@@ -129,6 +118,14 @@ void insertInfomation(EmployeeList &list)
 
 void displaySalary(EmployeeList &list)
 {
+    if (!list.isPayed())
+    {
+        colorTextForOneLine("Some employees have not been paid.\n", RED);
+        cout << "Are you sure to display salary table? (y/n): ";
+        char choice;
+        cin >> choice;
+        if (choice != 'y') return;
+    }
     colorTextForOneLine("*** Displaying salary table ***\n", GREEN);
     list.display();
     colorTextForOneLine("Displaying salary table done.\n", GREEN);
@@ -149,7 +146,8 @@ void menu()
     EmployeeList list;
     string loadFileName = "employees.txt";
     list.loadFromFile(loadFileName);
-    loading();
+    // loading();
+    loadingMode(1);
     cout << "Loading successfully!\n"
          << endl;
     while (true)

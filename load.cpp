@@ -41,7 +41,7 @@ void clearDisplay(COORD firstPst, COORD lastPst)
     }
     moveXY(firstPst);
 }
-void loading(int mode = 0)
+void loadingMode(int mode = 0)
 {
     if (mode == 1)
     {
@@ -61,7 +61,7 @@ void loading(int mode = 0)
     cInfo.bVisible = false;             
     SetConsoleCursorInfo(hStd, &cInfo); 
 
-    std::cout << "WAITING...";
+    std::cout << "Loading...";
     COORD firstPst; 
     COORD lastPst;
 

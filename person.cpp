@@ -2,6 +2,8 @@
 #include <vector>
 #include <fstream>
 #include <windows.h>
+#include <limits>
+#include <sstream>
 using namespace std;
 #define RED 12
 #define GREEN 10
@@ -59,8 +61,9 @@ protected:
     double sales;
 
 public:
-    SaleMan(string name, double sales = 0) : Person(name, 1), sales(sales)
+    SaleMan(string name, double sales = 0) : Person(name, 1)
     {
+        setSales(sales);
         setSalary();
     }
     double getSales() { return sales; }
@@ -74,8 +77,9 @@ protected:
     int workHours;
 
 public:
-    Technician(string name, int workHours = 0) : Person(name, 3), workHours(workHours)
+    Technician(string name, int workHours = 0) : Person(name, 3)
     {
+        setWorkHours(workHours);
         setSalary();
     }
     int getWorkHours() { return workHours; }
@@ -86,6 +90,7 @@ public:
 class Manager : virtual public Person
 {
     static int hasManager;
+
 public:
     Manager(string name) : Person(name, 4)
     {
@@ -102,6 +107,7 @@ class SalesManager : virtual public SaleMan
 public:
     SalesManager(string name, double sales = 0) : SaleMan(name, sales), Person(name, 2)
     {
+        setSales(sales);
         setSalary();
     }
     virtual void setSalary() { this->salary = 0.05 * sales + 5000; }
@@ -160,15 +166,45 @@ public:
             Technician *t = dynamic_cast<Technician *>(p);
             if (t)
             {
-                int workHours;
+                int workHours, isCorrectInput=0;
+                string info;
+                cout << "Enter work hours for Technician ";
                 colorTextForOneLine(t->getName(), PURPLE);
-                cout << " is a technician.\n";
-                cout << "Enter work hours, or enter -1 to skip: ";
-                cin >> workHours;
+                cout << ", or enter -1 to skip: ";
+                while (!isCorrectInput)
+                {
+                    cin >> info;
+                    if (info == "-1")
+                    {
+                        isCorrectInput = 1;
+                        continue;
+                    }
+                    int i = 0;
+                    for (; i < info.size(); i++)
+                    {
+                        char c = info[i];
+                        if (!isdigit(c))
+                        {
+                            colorTextForOneLine("Invalid input", RED);
+                            cout << ". Please enter an integer or -1 to skip: ";
+                            isCorrectInput = 0;
+                            break;
+                        }
+                    }
+                    if (i == info.size())
+                    {
+                        isCorrectInput = 1;
+                    }
+                }
+                stringstream ss(info);
+                ss >> workHours;
                 if (workHours == -1)
                     continue;
                 t->setWorkHours(workHours);
                 t->setSalary();
+                cout << "Salary for Technician ";
+                colorTextForOneLine(t->getName(), PURPLE);
+                cout << " is set to " << t->getSalary() << endl;
             }
         }
     }
@@ -176,25 +212,78 @@ public:
     {
         for (Person *p : employees)
         {
-            SaleMan *s = dynamic_cast<SaleMan *>(p);
-            if (s)
+            string position;
+            if (p->getGrade() == 1) position = "SaleMan";
+            else if (p->getGrade() == 2) position = "SalesManager";
+            else continue;
+            double sales, isCorrectInput=0;
+            string info;
+            cout << "Enter sales for " << position << " ";
+            colorTextForOneLine(p->getName(), PURPLE);
+            cout << ", or enter -1 to skip: ";
+            while (!isCorrectInput)
             {
-                double sales;
-                colorTextForOneLine(s->getName(), PURPLE);
-                cout << " is a saleman.\n";
-                cout << "Enter sales, or enter -1 to skip: ";
-                cin >> sales;
-                if (sales == -1)
+                cin >> info;
+                if (info == "-1")
+                {
+                    isCorrectInput = 1;
                     continue;
+                }
+                int i = 0;
+                for (; i < info.size(); i++)
+                {
+                    char c = info[i];
+                    if (!isdigit(c) && c != '.')
+                    {
+                        colorTextForOneLine("Invalid input", RED);
+                        cout << ". Please enter a number or -1 to skip: ";
+                        isCorrectInput = 0;
+                        break;
+                    }
+                }
+                if (i == info.size())
+                {
+                    isCorrectInput = 1;
+                }
+            }
+            stringstream ss(info);
+            ss >> sales;
+            if (sales == -1)
+                continue;
+            if (position == "SaleMan")
+            {
+                SaleMan *s = dynamic_cast<SaleMan *>(p);
                 s->setSales(sales);
                 s->setSalary();
+                cout << "Salary for SaleMan ";
+                colorTextForOneLine(s->getName(), PURPLE);
+                cout << " is set to " << s->getSalary() << endl;
+            }
+            else if (position == "SalesManager")
+            {
+                SalesManager *s = dynamic_cast<SalesManager *>(p);
+                s->setSales(sales);
+                s->setSalary();
+                cout << "Salary for SalesManager ";
+                colorTextForOneLine(s->getName(), PURPLE);
+                cout << " is set to " << s->getSalary() << endl;
             }
         }
     }
-    vector<Person *> getEmployees() { return employees; }
     void clear()
     {
         employees.clear();
+    }
+    bool isPayed()
+    {
+        for (Person *p : employees)
+        {
+            if (p->getSalary() == 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
     void saveToFile(string filename)
     {
@@ -224,28 +313,29 @@ public:
             switch (grade)
             {
             case 1:
-                employee = new SaleMan(name, salary / 0.04); 
+                employee = new SaleMan(name, salary / 0.04);
                 break;
             case 2:
-                employee = new SalesManager(name, salary - 5000); 
+                employee = new SalesManager(name, (salary - 5000) * 20);
                 break;
             case 3:
-                employee = new Technician(name, salary / 100); 
+                employee = new Technician(name, salary / 100);
                 break;
             case 4:
                 employee = new Manager(name);
                 break;
             default:
                 cerr << "Invalid grade for employee: " << name << endl;
-                continue; 
+                continue;
             }
             if (employee)
             {
-                employee->setSalary(); 
+                employee->setSalary();
                 employees.push_back(employee);
             }
         }
 
         file.close();
     }
+    vector<Person *> getEmployees() { return employees; }
 };
