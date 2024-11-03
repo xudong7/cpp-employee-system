@@ -146,7 +146,7 @@ void menu()
     EmployeeList list;
     string loadFileName = "employees.txt";
     list.loadFromFile(loadFileName);
-    // loading();
+    // loadingMode(); // normal loading
     loadingMode(1);
     cout << "Loading successfully!\n"
          << endl;

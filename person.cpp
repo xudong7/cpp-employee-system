@@ -144,7 +144,7 @@ public:
                 return;
             }
         }
-        cout << "Employee " << name << " not found." << endl;
+        colorTextForOneLine("Employee with Name " + name + " not found.\n", RED);
     }
     void deleteByID(int id)
     {
@@ -157,7 +157,7 @@ public:
                 return;
             }
         }
-        cout << "Employee with ID " << id << " not found." << endl;
+        colorTextForOneLine("Employee with ID " + to_string(id) + " not found.\n", RED);
     }
     void setWorkHour()
     {
