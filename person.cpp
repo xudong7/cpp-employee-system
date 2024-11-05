@@ -270,6 +270,58 @@ public:
             }
         }
     }
+    void addEmployeeAction()
+    {
+        string name;
+        int grade, isCorrectInput=0;
+        colorTextForOneLine("*** Adding new employee ***\n", GREEN);
+        cout << "please enter name: ";
+        cin >> name;
+        cout << endl;
+        string info;
+        cout << "please enter grade(4 for Manager, 3 for Technician, 2 for SalesManager, 1 for SaleMan): ";
+        cin >> info;
+        while (!isCorrectInput)
+        {
+            if (info.size() != 1 || info[0] < '1' || info[0] > '4')
+            {
+                colorTextForOneLine("Invalid grade", RED);
+                cout << ". Please enter a number from 1 to 4: ";
+                cin >> info;
+            }
+            else
+            {
+                isCorrectInput = 1;
+            }
+        }
+        stringstream ss(info);
+        ss >> grade;
+        switch (grade)
+        {
+        case 4:
+            if (Manager::getHasManager())
+            {
+                colorTextForOneLine("There is already a manager.\n", RED);
+                return;
+            }
+            addEmployee(new Manager(name));
+            break;
+        case 3:
+            addEmployee(new Technician(name));
+            break;
+        case 2:
+            addEmployee(new SalesManager(name));
+            break;
+        case 1:
+            addEmployee(new SaleMan(name));
+            break;
+        default:
+            colorTextForOneLine("Invalid grade.\n", RED);
+            return;
+        }
+        cout << endl;
+        colorTextForOneLine("Adding new employee done.\n", GREEN);
+    }
     void clear()
     {
         employees.clear();

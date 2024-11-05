@@ -58,39 +58,7 @@ void insertAll(EmployeeList &list)
 
 void addEmployee(EmployeeList &list)
 {
-    string name;
-    int grade;
-    colorTextForOneLine("*** Adding new employee ***\n", GREEN);
-    cout << "please enter name: ";
-    cin >> name;
-    cout << endl;
-    cout << "please enter grade(4 for Manager, 3 for Technician, 2 for SalesManager, 1 for SaleMan): ";
-    cin >> grade;
-    switch (grade)
-    {
-    case 4:
-        if (Manager::getHasManager())
-        {
-            colorTextForOneLine("There is already a manager.\n", RED);
-            return;
-        }
-        list.addEmployee(new Manager(name));
-        break;
-    case 3:
-        list.addEmployee(new Technician(name));
-        break;
-    case 2:
-        list.addEmployee(new SalesManager(name));
-        break;
-    case 1:
-        list.addEmployee(new SaleMan(name));
-        break;
-    default:
-        colorTextForOneLine("Invalid grade.\n", RED);
-        return;
-    }
-    cout << endl;
-    colorTextForOneLine("Adding new employee done.\n", GREEN);
+    list.addEmployeeAction();
 }
 
 void deleteEmployee(EmployeeList &list)
@@ -162,7 +130,7 @@ void menu()
         cout << "    5. Display Salary Table" << endl;
         cout << "    0. Exit" << endl;
         cout << "--------------------------------" << endl;
-        cout << "Please choose: ";
+        cout << "Choose Option: ";
         int choice;
         cin >> choice;
         switch (choice)
