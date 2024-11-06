@@ -66,10 +66,7 @@ void deleteEmployee(EmployeeList &list)
     colorTextForOneLine("*** Deleting employee ***\n", GREEN);
     list.display();
     cout << endl;
-    int id;
-    cout << "please enter the ID of employee: ";
-    cin >> id;
-    list.deleteByID(id);
+    list.deleteByID();
     cout << endl;
     colorTextForOneLine("Deleting employee done.\n", GREEN);
 }

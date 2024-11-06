@@ -146,8 +146,33 @@ public:
         }
         colorTextForOneLine("Employee with Name " + name + " not found.\n", RED);
     }
-    void deleteByID(int id)
+    void deleteByID()
     {
+        int id, isCorrectInput=0;
+        string info;
+        cout << "Enter ID of employee to delete: ";
+        while (!isCorrectInput)
+        {
+            cin >> info;
+            int i = 0;
+            for (; i < info.size(); i++)
+            {
+                char c = info[i];
+                if (!isdigit(c))
+                {
+                    colorTextForOneLine("Invalid input", RED);
+                    cout << ". Please enter an integer: ";
+                    isCorrectInput = 0;
+                    break;
+                }
+            }
+            if (i == info.size())
+            {
+                isCorrectInput = 1;
+            }
+        }
+        stringstream ss(info);
+        ss >> id;
         for (int i = 0; i < employees.size(); i++)
         {
             if (employees[i]->getID() == id)
